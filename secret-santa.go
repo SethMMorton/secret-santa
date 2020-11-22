@@ -80,15 +80,17 @@ func determineRecipients(givers []string, invalidMapping map[string][]string) ([
 
 		// If any pairing is self or invalid, reject this selection.
 		invalidSolution := false
-		for i, name := range givers {
+		for j, name := range givers {
+
 			// Self pairing
-			if name == recipients[i] {
+			if name == recipients[j] {
 				invalidSolution = true
 				break
 			}
+
 			// Invalid pairing
 			ok := true
-			for _, invalidName := range invalidMapping[recipients[i]] {
+			for _, invalidName := range invalidMapping[recipients[j]] {
 				if name == invalidName {
 					ok = false
 				}
@@ -97,6 +99,7 @@ func determineRecipients(givers []string, invalidMapping map[string][]string) ([
 				invalidSolution = true
 				break
 			}
+
 		}
 		if invalidSolution {
 			continue
