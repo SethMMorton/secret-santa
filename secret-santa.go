@@ -95,6 +95,16 @@ func determineRecipients(givers []string, invalidMapping map[string][]string) ([
 					ok = false
 				}
 			}
+
+			// Circular pairing - if recipent is also giving to giver
+			for k, reverseName := range givers {
+				if reverseName == recipients[j] {
+					if name == recipients[k] {
+						ok = false
+					}
+					break
+				}
+			}
 			if !ok {
 				invalidSolution = true
 				break
