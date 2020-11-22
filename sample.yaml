@@ -1,0 +1,32 @@
+- name: Gandalf
+  invalid:
+    - Elrond
+    - Galadriel
+- name: Elrond
+  invalid:
+    - Gandalf
+    - Galadriel
+- name: Galadriel
+  invalid:
+    - Gandalf
+    - Elrond
+- name: Aragorn
+  invalid:
+    - Arwen
+- name: Arwen
+  invalid:
+    - Aragorn
+- name: Legolas
+  invalid:
+    - Gimli
+- name: Gimli
+  invalid:
+    - Legolas
+- name: Frodo
+  invalid:
+    - Samwise
+- name: Samwise
+  invalid:
+    - Frodo
+- name: Pippin
+- name: Merry
