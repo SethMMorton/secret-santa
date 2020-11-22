@@ -18,6 +18,11 @@ enhancement?
 
 # Installation
 
+The simplest method is to go to
+https://github.com/SethMMorton/secret-santa/releases/ and download the
+binary for your OS. On MacOS/Linux you may have to make the file executable
+by executing `chmod +x` on the file.
+
 If you have `go` installed on your computer, you can just use `go get`:
 
 ```sh
