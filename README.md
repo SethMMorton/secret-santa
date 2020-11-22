@@ -2,7 +2,7 @@
 
 "Secret Santa" is a gift-giving game wherin each participant (the giver) is
 assigned the name of another participant (the reciever), and the giver
-purchases a gift for the reciever. Each person gets a gift. For large families
+purchases a gift for the reciever. Each person gets a gift! For large families
 or work settings, it is a good way to share gifts without making people feel
 as though they must spend a lot of time and money purchasing gifts for
 everyone.
@@ -52,13 +52,14 @@ file. The person's name appears under the `name` attribute. For example:
 ```
 
 If you execute `secret-santa` on a file with the above contents, it will
-assign recipeients for each participant, ensuring there are no self-recipents.
+assign recipients for each participant, ensuring there are no self-recipients
+and no circular pairs (A gives to B, B gives to A).
 
 However, in practice, it is often desirable that people that are very close
-(e.g. spouces, significant others, etc.) not get each other in the Secret
+(e.g. spouses, significant others, etc.) not get each other in the Secret
 Santa because they were already buying each other gifts. To solve this problem
 you can assign a list of "invalid" recipients for each partipant. The
-`secret-santa` program will not allow these people to be recipents for that
+`secret-santa` program will not allow these people to be recipients for that
 participant. Here is how that might look:
 
 ```yaml
@@ -96,7 +97,7 @@ participant. Here is how that might look:
 - name: Dr. Bob
 ```
 
-To determine who is bying for how, simply execute the `secret-santa` program.
+To determine who is buying for whom, simply execute the `secret-santa` program.
 Here is what you might get:
 
 ```sh
@@ -114,5 +115,5 @@ Patrick ==> Karthik
 Mel     ==> Molly
 ```
 
-Each time you run the results will be different, so don't expect to get the
-above results.
+Each time you run the program the results will be different, so don't expect to
+get the above results should you use this exact example.
