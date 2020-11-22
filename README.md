@@ -1,64 +1,112 @@
-# Example
+# Secret Santa
 
-Suppose that you want to create a Secret Santa for some members of the
-fellowship of the Ring as well as some significant elves. Of course, some
-members of the fellowship might not want to be each other's Secret Santa
-because they might be buying gifts for each other outside of the Secret
-Santa because they are so close.
+"Secret Santa" is a gift-giving game wherin each participant (the giver) is
+assigned the name of another participant (the reciever), and the giver
+purchases a gift for the reciever. Each person gets a gift. For large families
+or work settings, it is a good way to share gifts without making people feel
+as though they must spend a lot of time and money purchasing gifts for
+everyone.
 
-Here's an example input file (in YAML format).
+Traditionally, at some point ahead of the gathering, names are placed into a
+hat and each participant draws for whom they will be purchasing. However,
+there are some times when getting everyone together is not feasable (for
+example, in a global pandemic), so this program serves as a virtual "hat".
 
-```yaml
-- name: Gandalf
-  invalid:
-    - Elrond
-    - Galadriel
-- name: Elrond
-  invalid:
-    - Gandalf
-    - Galadriel
-- name: Galadriel
-  invalid:
-    - Gandalf
-    - Elrond
-- name: Aragorn
-  invalid:
-    - Arwen
-- name: Arwen
-  invalid:
-    - Aragorn
-- name: Legolas
-  invalid:
-    - Gimli
-- name: Gimli
-  invalid:
-    - Legolas
-- name: Frodo
-  invalid:
-    - Samwise
-- name: Samwise
-  invalid:
-    - Frodo
-- name: Pippin
-- name: Merry
+To be fair - this program does not generate secret results. At least the
+person executing the program will see all the assignments. Maybe a future
+enhancement?
+
+# Installation
+
+If you have `go` installed on your computer, you can just use `go get`:
+
+```sh
+$ go get github.com/SethMMorton/secret-santa
 ```
 
-To determine who is bying for how, simply execute the `simple-santa` program.
+You will find `secret-santa` installed in `$GOPATH/bin`.
+
+# Example
+
+Suppose that you want to create a Secret Santa for a group of friends.
+You would create a YAML where each participant is an element in the
+file. The person's name appears under the `name` attribute. For example:
+
+```yaml
+- name: Steve
+- name: Jane
+- name: Karthik
+- name: Molly
+- name: Patrick
+- name: Mel
+- name: Peggy
+- name: Jim
+- name: Mildred
+- name: Carl
+- name: Dr. Bob
+```
+
+If you execute `secret-santa` on a file with the above contents, it will
+assign recipeients for each participant, ensuring there are no self-recipents.
+
+However, in practice, it is often desirable that people that are very close
+(e.g. spouces, significant others, etc.) not get each other in the Secret
+Santa because they were already buying each other gifts. To solve this problem
+you can assign a list of "invalid" recipients for each partipant. The
+`secret-santa` program will not allow these people to be recipents for that
+participant. Here is how that might look:
+
+```yaml
+- name: Steve
+  invalid:
+    - Jane
+    - Karthik
+- name: Jane
+  invalid:
+    - Steve
+    - Karthik
+- name: Karthik
+  invalid:
+    - Steve
+    - Jane
+- name: Molly
+  invalid:
+    - Patrick
+- name: Patrick
+  invalid:
+    - Molly
+- name: Mel
+  invalid:
+    - Peggy
+- name: Peggy
+  invalid:
+    - Mel
+- name: Jim
+  invalid:
+    - Mildred
+- name: Mildred
+  invalid:
+    - Jim
+- name: Carl
+- name: Dr. Bob
+```
+
+To determine who is bying for how, simply execute the `secret-santa` program.
 Here is what you might get:
 
 ```sh
-$ simple-santa fellowship.yaml
-Gimli     ==> Elrond
-Merry     ==> Galadriel
-Gandalf   ==> Aragorn
-Galadriel ==> Legolas
-Aragorn   ==> Gandalf
-Frodo     ==> Arwen
-Samwise   ==> Gimli
-Pippin    ==> Samwise
-Elrond    ==> Pippin
-Arwen     ==> Merry
-Legolas   ==> Frodo
+$ secret-santa sample.yaml
+Peggy   ==> Carl
+Mildred ==> Patrick
+Carl    ==> Mel
+Steve   ==> Peggy
+Jane    ==> Mildred
+Karthik ==> Jim
+Jim     ==> Steve
+Dr. Bob ==> Jane
+Molly   ==> Dr. Bob
+Patrick ==> Karthik
+Mel     ==> Molly
 ```
 
 Each time you run the results will be different, so don't expect to get the
