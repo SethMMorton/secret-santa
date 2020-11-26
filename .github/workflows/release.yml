@@ -23,34 +23,10 @@ jobs:
           go-version: "^1.15"
 
       - name: Build project
-        run: go build -o secret-santa-${{ matrix-os }}
+        run: go build -o secret-santa
 
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
-          name: secret-santa-${{ matrix-os }}
-          path: secret-santa-${{ matrix-os }}
-
-      # - name: Create release
-      #   id: create_release
-      #   uses: actions/create-release@v1
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   with:
-      #     tag_name: ${{ github.ref }}
-      #     release_name: Release ${{ github.ref }}
-      #     draft: false
-      #     prerelease: false
-
-      # - name: Upload binary
-      #   id: upload-release-asset
-      #   uses: actions/upload-release-asset@v1
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   with:
-      #     # This pulls from the CREATE RELEASE step above, referencing it's
-      #     # ID to get its outputs object, which include a `upload_url`.
-      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
-      #     asset_path: ./my-artifact.zip
-      #     asset_name: my-artifact.zip
-      #     asset_content_type: application/zip
+          name: secret-santa-${{ matrix.os }}
+          path: ./secret-santa
