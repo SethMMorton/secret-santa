@@ -10,30 +10,64 @@
         @keydown.enter.prevent="addParticipant"
       >
       </q-input>
+      <q-list>
+        <ParticipantProperties
+          v-for="k in store.allParticipants()"
+          :key="k"
+          :gifter="k"
+        >
+        </ParticipantProperties>
+      </q-list>
       <div>
         <q-btn label="Submit" type="submit" color="primary"></q-btn>
         <q-btn label="Reset" type="reset" color="primary" flat></q-btn>
       </div>
     </q-form>
-    <q-list>
-      <ParticipantProperties
-        v-for="k in store.allParticipants()"
-        :key="k"
-        :gifter="k"
-      >
-      </ParticipantProperties>
-    </q-list>
+    <q-table
+      v-if="Object.keys(solution).length > 0"
+      title="Secret Santa Solution"
+      :rows="solutionRows"
+      :columns="solutionColumns"
+      row-key="from"
+      separator="vertical"
+    ></q-table>
   </q-page>
-  <q-input :model-value="results" readonly autogrow></q-input>
 </template>
 
 <script>
 import { defineComponent } from "vue";
 
 import { store } from "../store";
-import { factorial, circularPairing, shuffleArray } from "../util";
 
 import ParticipantProperties from "components/ParticipantProperties.vue";
+
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
+
+function factorial(n) {
+  let ans = 1;
+  for (let i = 2; i <= n; i++) {
+    ans = ans * i;
+  }
+  return ans;
+}
+
+// Determine if any gifters are giving to someone who
+// is also giving back to them.
+function circularPairing(giftersToRecievers) {
+  for (const firstPerson in giftersToRecievers) {
+    const secondPerson = giftersToRecievers[firstPerson];
+    const thirdPerson = giftersToRecievers[secondPerson];
+    if (firstPerson === thirdPerson) {
+      return true;
+    }
+  }
+  return false;
+}
 
 export default defineComponent({
   name: "IndexPage",
@@ -47,28 +81,39 @@ export default defineComponent({
       participant: "",
       solution: {},
       store,
+      solutionColumns: [
+        {
+          name: "gifter",
+          required: true,
+          label: "From",
+          align: "left",
+          field: "from",
+          sortable: true,
+        },
+        {
+          name: "recipient",
+          required: true,
+          label: "To",
+          align: "left",
+          field: "to",
+          sortable: true,
+        },
+      ],
     };
   },
 
   computed: {
-    // Format the recipients list nicely
-    results() {
-      const gifters = Object.keys(this.solution);
-      if (gifters.length === 0) {
-        return "";
-      }
-      const lengths = gifters.map((value) => value.length);
-      const maxLen = Math.max(...lengths);
-
-      let resultArray = [];
-      for (const [gifter, recipient] of Object.entries(this.solution)) {
-        resultArray.push(gifter.padEnd(maxLen));
-        resultArray.push(" ==> ");
-        resultArray.push(recipient);
-        resultArray.push("\n");
-      }
-      console.log(resultArray.join(""));
-      return resultArray.join("");
+    solutionRows() {
+      console.log(
+        Object.entries(this.solution).map(([gifter, receiver]) => ({
+          from: gifter,
+          to: receiver,
+        }))
+      );
+      return Object.entries(this.solution).map(([gifter, receiver]) => ({
+        from: gifter,
+        to: receiver,
+      }));
     },
   },
 
@@ -76,12 +121,16 @@ export default defineComponent({
     addParticipant() {
       if (this.participant !== "") {
         this.store.addParticipant(this.participant);
+        this.participant = "";
       }
     },
+
     resetParticipants() {
       this.participant = "";
+      this.solution = {};
       this.store.resetParticipants();
     },
+
     calculate() {
       // Initiallize with the given list
       const gifters = this.store.allParticipants();
