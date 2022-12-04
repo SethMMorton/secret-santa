@@ -1,6 +1,6 @@
 <template>
-  <q-item>
-    <q-item-section>
+  <q-item class="row">
+    <q-item-section class="col">
       <q-expansion-item expand-separator :label="gifter">
         <q-option-group
           v-model="store.gifterToAllowedRecipients[gifter]"
@@ -9,12 +9,13 @@
         ></q-option-group>
       </q-expansion-item>
     </q-item-section>
-    <q-item-section>
+    <q-item-section class="col-1">
       <q-btn
         class="gt-xs"
         flat
         dense
         icon="delete"
+        color="secondary"
         @click="removeParticipant"
       ></q-btn>
     </q-item-section>
@@ -28,6 +29,8 @@ import { store } from "../store";
 
 export default defineComponent({
   name: "ParticipantProperties",
+
+  emits: ["participantRemoved"],
 
   props: {
     gifter: {
@@ -55,6 +58,7 @@ export default defineComponent({
   methods: {
     removeParticipant() {
       this.store.removeParticipant(this.gifter);
+      this.$emit("participantRemoved");
     },
   },
 });
