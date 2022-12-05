@@ -85,13 +85,14 @@ export default defineComponent({
       if (this.participant !== "") {
         this.store.addParticipant(this.participant);
         this.participant = "";
+        this.$emit("solution", {});
       }
     },
 
     resetParticipants() {
       this.participant = "";
-      this.$emit("solution", {});
       this.store.resetParticipants();
+      this.$emit("solution", {});
     },
 
     calculate() {
