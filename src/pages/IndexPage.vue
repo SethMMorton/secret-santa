@@ -68,6 +68,7 @@
     <q-card class="col-3 q-ma-xl">
       <ParticipantInput
         @solution="(solution) => (this.solution = solution)"
+        @cannot-solve="solverError = true"
       ></ParticipantInput>
     </q-card>
     <q-table
@@ -81,6 +82,30 @@
       :pagination="{ rowsPerPage: Object.keys(solution).length }"
       hide-pagination
     ></q-table>
+    <q-dialog v-model="solverError">
+      <q-card class="bg-secondary text-white">
+        <q-card-section>
+          <div class="text-h6">Cannot Solve Your Secret Santa!</div>
+        </q-card-section>
+        <q-card-section class="q-pt-none">
+          Sorry! The criteria you have provided is not solvable! Some
+          troubleshooting tips:
+          <ul>
+            <li>There must be three or more participants.</li>
+            <li>
+              Ensure that each gifter has at <em>least</em> one valid recipient.
+            </li>
+            <li>
+              The more valid recipients each gifter has available, the more
+              solutions will present themselves.
+            </li>
+          </ul>
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn label="Got It" color="primary" v-close-popup></q-btn>
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
 
@@ -96,6 +121,7 @@ export default defineComponent({
 
   data() {
     return {
+      solverError: false,
       solution: {},
       solutionColumns: [
         {

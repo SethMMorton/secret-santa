@@ -71,7 +71,7 @@ export default defineComponent({
 
   components: { ParticipantProperties },
 
-  emits: ["solution"],
+  emits: ["solution", "cannotSolve"],
 
   data() {
     return {
@@ -145,6 +145,7 @@ export default defineComponent({
 
       // Invalid solution, return empty solution
       this.$emit("solution", {});
+      this.$emit("cannotSolve");
     },
   },
 });
