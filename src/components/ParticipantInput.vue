@@ -24,6 +24,9 @@
         toggle-order="ft"
         @update:modelValue="setExpanded"
       >
+        <q-tooltip class="text-body2">
+          Expand or collapse all potential reciever lists for each gifter
+        </q-tooltip>
       </q-checkbox>
     </div>
     <q-list class="q-pa-sm">

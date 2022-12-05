@@ -2,6 +2,9 @@
   <q-item class="row">
     <q-item-section class="col">
       <q-expansion-item v-model="expanded" expand-separator :label="gifter">
+        <q-tooltip class="text-body2">
+          Disallow this receiver for this gifter
+        </q-tooltip>
         <q-option-group
           v-model="store.gifterToAllowedRecipients[gifter]"
           :options="options"
@@ -17,7 +20,9 @@
         icon="delete"
         color="secondary"
         @click="removeParticipant"
-      ></q-btn>
+      >
+        <q-tooltip class="text-body2">Remove this participant</q-tooltip>
+      </q-btn>
     </q-item-section>
   </q-item>
 </template>
