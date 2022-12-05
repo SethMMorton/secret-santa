@@ -1,7 +1,7 @@
 <template>
   <q-item class="row">
     <q-item-section class="col">
-      <q-expansion-item expand-separator :label="gifter">
+      <q-expansion-item v-model="expanded" expand-separator :label="gifter">
         <q-option-group
           v-model="store.gifterToAllowedRecipients[gifter]"
           :options="options"
@@ -30,12 +30,15 @@ import { store } from "../store";
 export default defineComponent({
   name: "ParticipantProperties",
 
-  emits: ["participantRemoved"],
+  emits: ["participantRemoved", "update:modelValue"],
 
   props: {
     gifter: {
       type: String,
       required: true,
+    },
+    modelValue: {
+      type: Boolean,
     },
   },
 
@@ -52,6 +55,14 @@ export default defineComponent({
         .allParticipants()
         .filter((recipent) => recipent !== this.gifter)
         .map((v) => ({ label: v, value: v }));
+    },
+    expanded: {
+      get() {
+        return this.modelValue;
+      },
+      set(value) {
+        this.$emit("update:modelValue", value);
+      },
     },
   },
 

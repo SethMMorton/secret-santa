@@ -11,20 +11,29 @@
     >
     </q-input>
     <q-space class="q-pa-md"></q-space>
-    <div class="q-gutter-lg q-pa-sm flex justify-around">
+    <div class="q-gutter-sm q-pa-sm flex justify-around">
       <q-btn
         label="Solve The Secret Santa Problem"
         type="submit"
         color="primary"
       ></q-btn>
       <q-btn label="Start Over" type="reset" color="secondary"></q-btn>
+      <q-checkbox
+        :model-value="expanded"
+        indeterminate-value="some"
+        toggle-order="ft"
+        @update:modelValue="setExpanded"
+      >
+      </q-checkbox>
     </div>
     <q-list class="q-pa-sm">
       <ParticipantProperties
         v-for="k in store.allParticipants()"
+        v-model="expandedParticipant[k]"
         :key="k"
         :gifter="k"
         @participant-removed="$emit('solution', {})"
+        @update:modelValue="updateExpanded"
       >
       </ParticipantProperties>
     </q-list>
@@ -77,15 +86,36 @@ export default defineComponent({
     return {
       participant: "",
       store,
+      expandedParticipant: {},
     };
+  },
+
+  computed: {
+    expanded() {
+      const allClosed = Object.entries(this.expandedParticipant).every(
+        ([k, v]) => !v
+      );
+      const allOpened = Object.entries(this.expandedParticipant).every(
+        ([k, v]) => v
+      );
+      if (allClosed) {
+        return false;
+      } else if (allOpened) {
+        return true;
+      } else {
+        return "some";
+      }
+    },
   },
 
   methods: {
     addParticipant() {
       if (this.participant !== "") {
         this.store.addParticipant(this.participant);
+        this.expandedParticipant[this.participant] = false;
         this.participant = "";
         this.$emit("solution", {});
+        this.updateExpanded();
       }
     },
 
@@ -93,6 +123,14 @@ export default defineComponent({
       this.participant = "";
       this.store.resetParticipants();
       this.$emit("solution", {});
+      delete this.expandedParticipant[this.participant];
+      this.updateExpanded();
+    },
+
+    setExpanded(value) {
+      Object.keys(this.expandedParticipant).forEach(
+        (k) => (this.expandedParticipant[k] = value)
+      );
     },
 
     calculate() {
