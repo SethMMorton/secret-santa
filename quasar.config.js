@@ -12,8 +12,6 @@ const { configure } = require("quasar/wrappers");
 
 module.exports = configure(function (/* ctx */) {
   return {
-    base: "/secret-santa/",
-
     eslint: {
       // fix: true,
       // include = [],
@@ -62,7 +60,7 @@ module.exports = configure(function (/* ctx */) {
 
       // rebuildCache: true, // rebuilds Vite/linter/etc cache on startup
 
-      // publicPath: '/',
+      publicPath: "/secret-santa/",
       // analyze: true,
       // env: {},
       // rawDefine: {}
