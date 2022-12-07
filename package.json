@@ -1,6 +1,6 @@
 {
   "name": "secret-santa",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Virtual Secret Santa Pairing Generator",
   "productName": "Secret Santa",
   "author": "Seth Morton <seth.m.morton@gmail.com>",
